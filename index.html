@@ -1,408 +1,229 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Campus Hub</title>
-  <style>
-    /* ---------- Reset ---------- */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <title>Campus Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    /* ---------- Variables ---------- */
-    :root {
-      --bg-color: white;
-      --text-color: #333;
-      --light-red-bg: #fef5f5;
-      --border-light: #e0b4b4;
-      --card-shadow: rgba(178, 34, 34, 0.08);
-      --footer-text: white;
-      --red: #b22222;
-      --red-hover: #8b1a1a;
-      --muted-text: #a16b6b;
-    }
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            background-color: #ffffff;
+        }
 
-    body.dark-mode {
-      --bg-color: #1a1a1a;
-      --text-color: #f0f0f0;
-      --light-red-bg: #2a1f1f;
-      --border-light: #5a3e3e;
-      --card-shadow: rgba(255, 100, 100, 0.15);
-      --footer-text: #f0f0f0;
-      background-color: #1a1a1a;
-      color: #f0f0f0;
-    }
+        /* Navigation Bar */
+        .nav-bar {
+            background-color: #b91c1c;
+            overflow: hidden;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-    /* ---------- Base ---------- */
-    body {
-      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      line-height: 1.6;
-      transition: background-color 0.3s, color 0.3s;
-    }
+        .nav-bar a {
+            float: left;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+            cursor: pointer;
+        }
 
-    /* ---------- Layout ---------- */
-    .page-header {
-      background-color: #b22222; /* constant red */
-      padding: 0.5rem 1rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      align-items: center;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
+        .nav-bar a:hover {
+            background-color: #991b1b;
+            color: #fecaca;
+        }
 
-    nav {
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-    }
+        .nav-bar a.active {
+            background-color: #7f1d1d;
+        }
 
-    .page-header a {
-      color: white;
-      text-decoration: none;
-      font-weight: 500;
-      padding: 0.5rem 0;
-      border-bottom: 2px solid transparent;
-      transition: border-color 0.2s, color 0.2s;
-    }
+        .page {
+            display: none;
+            padding: 40px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
 
-    .page-header a:hover {
-      border-bottom-color: white;
-      color: #ffe4e4;
-    }
+        .page.active {
+            display: block;
+        }
 
-    /* Dark mode toggle button */
-    .dark-toggle {
-      background: none;
-      border: 2px solid white;
-      color: white;
-      font-size: 1.2rem;
-      cursor: pointer;
-      padding: 0.3rem 0.8rem;
-      border-radius: 30px;
-      margin-left: auto; /* push to the right */
-      transition: background 0.2s;
-    }
+        .page h1 {
+            color: #b91c1c;
+            margin-bottom: 16px;
+            font-size: 28px;
+        }
 
-    .dark-toggle:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
+        .page h2 {
+            color: #991b1b;
+            margin-top: 24px;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
 
-    main {
-      max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 1.5rem;
-    }
+        .page p {
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
 
-    footer {
-      background-color: #b22222;
-      color: var(--footer-text);
-      text-align: center;
-      padding: 1.5rem;
-      margin-top: 4rem;
-      font-size: 0.95rem;
-    }
+        .page ul {
+            margin-left: 20px;
+            margin-bottom: 12px;
+            line-height: 1.9;
+        }
 
-    footer a {
-      color: #ffd9d9;
-      text-decoration: underline;
-    }
+        .contact-item {
+            border-left: 3px solid #b91c1c;
+            padding: 10px 16px;
+            margin-bottom: 14px;
+            background-color: #fef2f2;
+        }
 
-    footer a:hover {
-      color: white;
-    }
+        .contact-item strong {
+            color: #b91c1c;
+        }
 
-    .footer-credit {
-      margin-top: 0.8rem;
-      opacity: 0.9;
-    }
+        .service-card {
+            border: 1px solid #e5e7eb;
+            padding: 16px;
+            margin-bottom: 14px;
+            background-color: #fff;
+        }
 
-    /* ---------- Components ---------- */
-    /* Headings */
-    h1, h2, h3 {
-      color: #b22222;
-      margin-bottom: 0.75rem;
-    }
+        .service-card h3 {
+            color: #b91c1c;
+            margin-bottom: 6px;
+            font-size: 17px;
+        }
 
-    h1 {
-      font-size: 2.2rem;
-      margin-top: 1rem;
-      border-left: 6px solid #b22222;
-      padding-left: 1rem;
-    }
-
-    /* Welcome box */
-    .welcome {
-      background-color: var(--light-red-bg);
-      padding: 1.5rem 2rem;
-      border-radius: 12px;
-      margin: 2rem 0 2.5rem 0;
-      box-shadow: 0 2px 8px var(--card-shadow);
-    }
-
-    .welcome p {
-      font-size: 1.2rem;
-      color: var(--text-color);
-    }
-
-    /* Card grid */
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-
-    .card {
-      background: var(--bg-color);
-      border: 1px solid var(--border-light);
-      border-radius: 16px;
-      padding: 1.5rem;
-      box-shadow: 0 4px 12px var(--card-shadow);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px var(--card-shadow);
-      border-color: #b22222;
-    }
-
-    .card h3 {
-      margin-top: 0;
-      border-bottom: 2px solid var(--border-light);
-      padding-bottom: 0.5rem;
-    }
-
-    .card p {
-      color: var(--text-color);
-      margin: 1rem 0 0.5rem 0;
-    }
-
-    .card .meta {
-      font-size: 0.9rem;
-      color: var(--muted-text);
-      font-style: italic;
-    }
-
-    /* Information sections (Students & Services) */
-    .info-section {
-      background-color: var(--light-red-bg);
-      border-left: 6px solid #b22222;
-      padding: 2rem;
-      border-radius: 0 16px 16px 0;
-      margin: 3rem 0;
-    }
-
-    .info-section h2 {
-      margin-top: 0;
-    }
-
-    .info-section p {
-      margin-bottom: 1rem;
-    }
-
-    .info-section ul {
-      margin-left: 1.5rem;
-      color: var(--text-color);
-    }
-
-    /* Back to top button */
-    #back-to-top {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      background-color: #b22222;
-      color: white;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s, visibility 0.3s, background 0.2s;
-      border: none;
-      z-index: 1000;
-    }
-
-    #back-to-top.show {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    #back-to-top:hover {
-      background-color: #8b1a1a;
-    }
-
-    /* ---------- Responsive ---------- */
-    @media (max-width: 600px) {
-      .page-header {
-        justify-content: center;
-        gap: 1rem;
-      }
-      h1 {
-        font-size: 1.8rem;
-      }
-      .dark-toggle {
-        margin-left: 0; /* center on mobile */
-      }
-    }
-  </style>
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-size: 13px;
+            margin-top: 40px;
+            border-top: 1px solid #e5e7eb;
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Header with navigation and dark mode toggle -->
-  <header class="page-header">
-    <nav>
-      <a href="#home">Home</a>
-      <a href="#students">Students</a>
-      <a href="#services">Services</a>
-      <a href="#contact">Contact Us</a>
-    </nav>
-    <button class="dark-toggle" id="darkModeToggle" aria-label="Toggle dark mode">🌙</button>
-  </header>
-
-  <!-- Main content area -->
-  <main>
-    <h1 id="home">Welcome to Campus Hub</h1>
-
-    <div class="welcome">
-      <p><strong>Your go-to spot for everything university life.</strong> You can find announcements, events, study resources, and support services all in one place.</p>
+    <!-- Navigation Bar -->
+    <div class="nav-bar">
+        <a href="javascript:void(0)" class="active" onclick="showPage('home', this)">Home</a>
+        <a href="javascript:void(0)" onclick="showPage('students', this)">Students</a>
+        <a href="javascript:void(0)" onclick="showPage('services', this)">Services</a>
+        <a href="javascript:void(0)" onclick="showPage('contact', this)">Contact Us</a>
+        <a href="javascript:void(0)" onclick="showPage('about', this)">About Us</a>
     </div>
 
-    <h2>Scoop</h2>
-    <div class="card-grid">
-      <article class="card">
-        <h3>📢 Announcements</h3>
-        <p><strong>Library extended hours</strong> – The main library will be open until 7 p.m. during finals week.</p>
-        <p><strong>Parking update</strong> – Lot B is closed for maintenance. Use other lots or the shuttle in the meantime.</p>
-        <div class="meta">Posted 2 hours ago</div>
-      </article>
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <h1>Welcome to Campus Hub!</h1>
+        <p>Campus Hub is the main online resource for students, faculty, and staff at University of Eastern Pangasinan. Whether you're a new student getting used to the campus or a returning student looking for quick access to services, this is your starting point.</p>
 
-      <article class="card">
-        <h3>📅 Upcoming Events</h3>
-        <p><strong>Career Fair</strong> – Wednesday, March 11, 10 AM–3 PM in the Main Lobby.</p>
-        <p><strong>Guest lecture:</strong> Dr. Maria Santos' presentation, "AI in Healthcare," is on Friday at 4 PM in room 201.</p>
-        <div class="meta">Free food at both events</div>
-      </article>
+        <h2>About the University</h2>
+        <p>UEP was founded in 2005 by Dr. Ramon V. Guico III. Dr. Guico's dissertation advocated for equitable education. The university began in a modest building in the old public market. Since then, it has grown into a modern campus along MacArthur Highway in Canarvacanan, Barangay, with Binalonan's countryside as a backdrop. It houses academic departments such as Criminology, Hospitality and Management, Business Administration, Education, Midwifery, and Information Technology.</p>
 
-      <article class="card">
-        <h3>📘 Study Resources</h3>
-        <p><strong>Writing center</strong> – Drop-in tutoring for essays, Mon–Thu 2–6 PM.</p>
-        <p><strong>Math help lab</strong> – Open now in Smith Hall, room 12.</p>
-        <p><strong>Past exam database</strong> – Access via the student portal.</p>
-        <div class="meta">New: online booking available</div>
-      </article>
-
-      <article class="card">
-        <h3>🎓 Student Services</h3>
-        <p><strong>Counseling services</strong> – Same-day appointments available. Call 555-0199.</p>
-        <p><strong>Tech hub</strong> – Software help, 9–5 weekdays.</p>
-        <div class="meta">All services are free for students</div>
-      </article>
+        <h2>Quick Announcements</h2>
+        <ul>
+            <li>All students, including new students, must wear the correct department uniform.</li>
+            <li>The list of new TES grantees who are qualified for the first semester of the 2025-2026 academic year has been released.</li>
+            <li>The ID stamp for the second semester is available at the Registrar's Office.</li>
+        </ul>
     </div>
 
-    <!-- Students section -->
-    <section id="students" class="info-section">
-      <h2>👥 For Students</h2>
-      <p>Everything you need to succeed, from orientation to graduation.</p>
-      <ul>
-        <li><strong>Academic advising:</strong> Drop-in hours Mon–Fri 9–4 in the Student Center.</li>
-        <li><strong>Peer tutoring:</strong> Free walk-in tutoring for math, writing, and sciences.</li>
-        <li><strong>Student clubs:</strong> Over 200 clubs – join one today!</li>
-        <li><strong>Health & wellness:</strong> Free telehealth and counseling appointments.</li>
-      </ul>
-      <p>Check the <a href="#services">Services</a> for more detailed info.</p>
-    </section>
+    <!-- Students Page -->
+    <div id="students" class="page">
+        <h1>Students</h1>
+        <p>The University of Eastern Pangasinan is home to a diverse group of students from all over the country. Our programs are designed to prepare students for professional careers and further academic study.</p>
 
-    <!-- Services section -->
-    <section id="services" class="info-section">
-      <h2>📚 Student Services</h2>
-      <p>We're here to support your academic journey and personal well‑being.</p>
-      <h3>Academic Support</h3>
-      <ul>
-        <li><strong>Writing Center:</strong> 2nd floor of the library. One‑on‑one appointments available.</li>
-        <li><strong>Math Lab:</strong> Room 67. No appointment needed.</li>
-        <li><strong>Study Skills Workshops:</strong> Every Tuesday 3 PM, room 305.</li>
-      </ul>
-      <h3>Health & Wellness</h3>
-      <ul>
-        <li><strong>Counseling Services:</strong> Confidential support. Call 555-0199 to schedule.</li>
-        <li><strong>Student Health Center:</strong> Located in the COE. Open 8–6 weekdays.</li>
-        <li><strong>Wellness coaching:</strong> Stress management, sleep, and nutrition.</li>
-      </ul>
-      <h3>Technology & Resources</h3>
-      <ul>
-        <li><strong>Tech Hub:</strong> Software help, and printing.</li>
-        <li><strong>Library Databases:</strong> Access journals and e‑books 24/7.</li>
-        <li><strong>Computer Labs:</strong> Open.</li>
-      </ul>
-      <p>For more, visit the Student Services office or email <a href="mailto:services@uni.edu">services@uni.edu</a>.</p>
-    </section>
-  </main>
+        <h2>Undergraduate Programs</h2>
+        <p>The university has nine undergraduate degree programs in Education, Hospitality Management, Criminal Justice Education, Business Administration, Information Technology, Midwifery, Accountancy, Accounting Information System, and Engineering. Class sizes are kept manageable so that students receive proper attention from their instructors.</p>
 
-  <!-- Footer with contact info -->
-  <footer id="contact">
-    <p>University of Eastern Pangasinan · Canarvacanan, Binalonan</p>
-    <p>📞 <a href="tel:+15555550199">(555) 555-0199</a> · ✉️ <a href="mailto:hub@uni.edu">hub@uni.edu</a></p>
-    <p class="footer-credit">2026 – Made by 1A Group (?) </p>
-  </footer>
+        <h2>Student Organizations</h2>
+        <p>There are different kinds of student organizations on campus, like academic clubs, cultural groups, volunteer teams, and sports clubs. Students are encouraged to join at least one organization to make friends and learn to lead.</p>
 
-  <!-- Back to top button -->
-  <button id="back-to-top" aria-label="Back to top">↑</button>
+        <h2>Academic Support</h2>
+        <ul>
+            <li>You can get help with your writing at the library on the third floor, which is above the registrar's office.</li>
+            <li>Students who are not doing well in school can make appointments with advisors through the Office of Student Affairs.</li>
+        </ul>
 
-  <script>
-    // ----- Dark mode toggle -----
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    const body = document.body;
+        <h2>Student Handbook</h2>
+        <p>All students must read and follow the rules in the Student Handbook. You can download copies from the portal.</p>
+    </div>
 
-    // Load saved preference
-    if (localStorage.getItem('darkMode') === 'enabled') {
-      body.classList.add('dark-mode');
-      darkModeToggle.textContent = '☀️';
-    }
+    <!-- Services Page -->
+    <div id="services" class="page">
+        <h1>Student Services</h1>
+        <p>The university offers many services to help students with different aspects of their education. Below is a summary of the offices and resources available on campus.</p>
 
-    darkModeToggle.addEventListener('click', () => {
-      body.classList.toggle('dark-mode');
-      const isDark = body.classList.contains('dark-mode');
-      localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
-      darkModeToggle.textContent = isDark ? '☀️' : '🌙';
-    });
+        <div class="service-card">
+            <h3>Financial Aid and Scholarships</h3>
+            <p>Helps students with scholarship applications, grant requests, and student loan processing. The office also manages work-study placements for students who qualify. It is on the second floor of the Finance Room..</p>
+        </div>
 
-    // ----- Back to top button -----
-    const backToTop = document.getElementById('back-to-top');
+        <div class="service-card">
+            <h3>Guidance Office</h3>
+            <p>It offers personal counseling, career guidance, and psychological support.</p>
+        </div>
 
-    function updateBackToTopVisibility() {
-      const scrollPos = window.scrollY + window.innerHeight;
-      const pageHeight = document.documentElement.scrollHeight;
+        <div class="service-card">
+            <h3>Registrar's Office</h3>
+            <p>Manages enrollment, grade records, transcript requests, and graduation clearance. It is located on the ground floor of the Administration Building. The office is open from 7:30 AM to 3:00 PM, Monday through Friday.</p>
+        </div>
 
-      // Show button if page is short (no scroll) or when near bottom (≤300px left)
-      if (pageHeight <= window.innerHeight || pageHeight - scrollPos <= 300) {
-        backToTop.classList.add('show');
-      } else {
-        backToTop.classList.remove('show');
-      }
-    }
+        <div class="service-card">
+            <h3>Library</h3>
+            <p>The main library has books, academic journals, and digital resources. There are computer stations with internet access. Open from 7:30 AM to 5:00 PM, Monday through Saturday.</p>
+        </div>
 
-    window.addEventListener('scroll', updateBackToTopVisibility);
-    window.addEventListener('resize', updateBackToTopVisibility);
-    updateBackToTopVisibility(); // initial check
+        <div class="service-card">
+            <h3>University Clinic</h3>
+            <p>It offers basic medical consultations, first aid, and dental checkups for students who are currently enrolled. You must have a valid campus ID and log in to visit. The clinic is open from 8:00 AM to 4:00 PM, Monday through Saturday.</p>
+        </div>
+    </div>
 
-    backToTop.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  </script>
+    <!-- Contact Us Page -->
+    <div id="contact" class="page">
+        <h1>Contact Us</h1>
+        <p>If you have any questions, concerns, or feedback, you can call us at (075) 562 5874 or send us a message on our Facebook page. You can also visit us in Binalonan, Pangasinan, Philippines, which is located along MacArthur Highway. Our school is ready to answer your questions.</p>
+    </div>
+
+    <!-- About Us Page -->
+    <div id="about" class="page">
+        <h1>Made by BSIT-1A, Group 3</h1>
+        <p>Led by Renz Viernes. The other members are Sev Florenz Doctor, Ervin Baniqued, Jose Anjelo Evangelista, Ferdinand Gabayan, Terrence Dela Cruz, Brylle Torrentira, and Kyle Ayson.</p>
+    </div>
+
+    <div class="footer">
+        HCI Midterm Laboratory Activity
+    </div>
+
+    <script>
+        function showPage(pageId, clickedLink) {
+            var pages = document.querySelectorAll('.page');
+            for (var i = 0; i < pages.length; i++) {
+                pages[i].classList.remove('active');
+            }
+
+            var links = document.querySelectorAll('.nav-bar a');
+            for (var i = 0; i < links.length; i++) {
+                links[i].classList.remove('active');
+            }
+
+            document.getElementById(pageId).classList.add('active');
+            clickedLink.classList.add('active');
+            window.scrollTo(0, 0);
+        }
+    </script>
+
 </body>
 </html>
